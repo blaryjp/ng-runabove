@@ -1,0 +1,20 @@
+{
+    "name": "ng-runabove",
+    "version": "0.0.1",
+    "homepage": "https://github.com/blaryjp/ng-runabove",
+    "authors": [
+        "Jean-Philippe Blary"
+    ],
+    "description": "An angular service for RunAbove API",
+    "main": "ng-runabove.js",
+    "keywords": [
+        "angular",
+        "service",
+        "provider",
+        "runabove",
+        "api"
+    ],
+    "dependencies": {
+        "angular": "1.x.x"
+    }
+}
