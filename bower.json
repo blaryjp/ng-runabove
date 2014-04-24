@@ -1,20 +1,21 @@
 {
-    "name": "ng-runabove",
-    "version": "0.0.1",
-    "homepage": "https://github.com/blaryjp/ng-runabove",
-    "authors": [
-        "Jean-Philippe Blary"
-    ],
-    "description": "An angular service for RunAbove API",
-    "main": "ng-runabove.js",
-    "keywords": [
-        "angular",
-        "service",
-        "provider",
-        "runabove",
-        "api"
-    ],
-    "dependencies": {
-        "angular": "1.x.x"
-    }
+  "name": "ng-runabove",
+  "main": "ng-runabove.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/blaryjp/ng-runabove",
+  "authors": [
+    "Jean-Philippe Blary (@blary_jp)"
+  ],
+  "description": "Angular Service for RunAbove API",
+  "keywords": [
+    "angular",
+    "service",
+    "provider",
+    "runabove",
+    "api"
+  ],
+  "license": "MIT",
+  "dependencies": {
+      "angular": "1.x.x"
+  }
 }
