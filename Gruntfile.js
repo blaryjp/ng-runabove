@@ -12,20 +12,6 @@ module.exports = function (grunt) {
 
     require('load-grunt-tasks')(grunt);
 
-    grunt.registerTask('default', [
-        'jshint',
-        'clean',
-        'uglify'
-    ]);
-
-    grunt.registerTask('release', [
-        'jshint',
-        'bump-only:' + type,
-        'clean',
-        'uglify',
-        'bump-commit'
-    ]);
-
     grunt.initConfig({
 
         pkg: grunt.file.readJSON('package.json'),
@@ -68,4 +54,26 @@ module.exports = function (grunt) {
         }
 
     });
+
+    // dev
+    grunt.registerTask('default', [
+        'jshint',
+        'clean',
+        'uglify'
+    ]);
+
+    // prod
+    grunt.registerTask('release', [
+        'jshint',
+        'bump-only:' + type,
+        'updatePkgConfig',
+        'clean',
+        'uglify',
+        'bump-commit'
+    ]);
+
+    grunt.registerTask('updatePkgConfig', function () {
+        grunt.config.set('pkg', grunt.file.readJSON('package.json'));
+    });
+
 };
