@@ -1,9 +1,9 @@
-
 /**
  * ngRunabove: Angular Service for RunAbove API
  *
  * @author Jean-Philippe Blary (@blary_jp)
  * @url https://github.com/blaryjp/ng-runabove
+ * @licence MIT
  */
 
 angular.module('ngRunabove', []);
@@ -36,7 +36,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
     /*==========  CONF  ==========*/
 
     this.setBasePath = function (url) {
-        basePath = url
+        basePath = url;
     };
 
     this.setAppKey = function (ak) {
@@ -60,7 +60,6 @@ angular.module('ngRunabove').provider('Runabove', function () {
     /*==========  PROVIDER  ==========*/
 
     this.$get = ['$http', '$q', function ($http, $q) {
-        'use strict';
 
         // At init, get CK if present
         keys.ck = localStorage.getItem('runabove-ck');
@@ -149,7 +148,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
                 // Based on a great idea of @gierschv
                 if (config.params && ~config.url.indexOf('{')) {
                     angular.forEach(config.params, function (paramVal, paramKey) {
-                        if ((new RegExp('\{' + paramKey + '\}')).test(config.url)) {
+                        if ((new RegExp('{' + paramKey + '}')).test(config.url)) {
                             config.url = config.url.replace('{' + paramKey + '}', paramVal);
                             delete config.params[paramKey];
                         }
@@ -245,12 +244,13 @@ angular.module('ngRunabove').provider('Runabove', function () {
          *  http://www.webtoolkit.info/
          *
          **/
+        /* jshint ignore:start */
         function SHA1 (msg) {
 
             function rotate_left(n,s) {
                 var t4 = ( n<<s ) | (n>>>(32-s));
                 return t4;
-            };
+            }
 
             function lsb_hex(val) {
                 var str='';
@@ -264,7 +264,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
                     str += vh.toString(16) + vl.toString(16);
                 }
                 return str;
-            };
+            }
 
             function cvt_hex(val) {
                 var str='';
@@ -276,7 +276,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
                     str += v.toString(16);
                 }
                 return str;
-            };
+            }
 
             function Utf8Encode(string) {
                 string = string.replace(/\r\n/g,'\n');
@@ -302,7 +302,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
                 }
 
                 return utftext;
-            };
+            }
 
             var blockstart;
             var i, j;
@@ -411,7 +411,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
             return temp.toLowerCase();
 
         }
-
+        /* jshint ignore:end */
 
         var fcts = {
             login     : login,
