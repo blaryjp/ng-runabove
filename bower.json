@@ -1,7 +1,7 @@
 {
   "name": "ng-runabove",
-  "main": "ng-runabove.js",
-  "version": "0.0.1",
+  "main": "ng-runabove.min.js",
+  "version": "0.0.0",
   "homepage": "https://github.com/blaryjp/ng-runabove",
   "authors": [
     "Jean-Philippe Blary (@blary_jp)"
@@ -15,6 +15,11 @@
     "api"
   ],
   "license": "MIT",
+  "ignore" : [
+    ".gitignore",
+    "package.json",
+    "Gruntfile.js"
+  ],
   "dependencies": {
       "angular": "1.x.x"
   }
