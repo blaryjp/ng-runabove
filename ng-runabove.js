@@ -196,6 +196,10 @@ angular.module('ngRunabove').provider('Runabove', function () {
 
         /*==========  COMMON  ==========*/
 
+        function isLogged () {
+            return !!keys.ck;
+        }
+
         function getApiTimeDiff () {
             return $http({
                 method  : 'GET',
@@ -412,6 +416,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
         var fcts = {
             login     : login,
             logout    : logout,
+            isLogged  : isLogged,
             getSchema : getSchema,
             getModels : getModels
         };
