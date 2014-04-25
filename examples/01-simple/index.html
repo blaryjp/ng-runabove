@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ngRunabove - Example 01: simple app</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.15/angular.min.js"></script>
+  <script src="../../ng-runabove.js"></script>
+  <script src="example01.js"></script>
+
+</head>
+<body ng-app="myApp">
+
+    <div ng-controller="myInfosCtrl">
+
+        <button ng-hide="isLogged" ng-click="login()">Log in</button>
+
+        <dl ng-show="isLogged && infos">
+            <dt>Last name: </dt> <dd>{{infos.name}}</dd>
+            <dt>First name: </dt> <dd>{{infos.firstname}}</dd>
+            <dt>Email: </dt> <dd>{{infos.email}}</dd>
+            <dt>Phone: </dt> <dd>{{infos.cellNumber}}</dd>
+        </dl>
+
+    </div>
+
+</body>
+</html>
