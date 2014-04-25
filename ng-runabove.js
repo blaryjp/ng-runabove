@@ -421,10 +421,10 @@ angular.module('ngRunabove').provider('Runabove', function () {
             getModels : getModels
         };
 
-        angular.forEach(['get', 'put', 'post', 'delete', 'remove'], function (name) {
+        angular.forEach(['get', 'put', 'post', 'delete', 'remove', 'del'], function (name) {
             fcts[name] = function (url, config) {
                 return request(angular.extend(config || {}, {
-                    method : (name === 'remove' ? 'delete' : name).toUpperCase(),
+                    method : ((name === 'remove' || name === 'del') ? 'delete' : name).toUpperCase(),
                     url    : url
                 }));
             };
