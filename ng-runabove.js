@@ -80,7 +80,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
                 method  : 'POST',
                 url     : basePath + '/auth/credential',
                 headers : {
-                    'X-Ovh-Application' : keys.ak
+                    'X-RA-Application' : keys.ak
                 },
                 data    : {
                     accessRules : accessRules,
