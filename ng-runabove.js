@@ -37,23 +37,40 @@ angular.module('ngRunabove').provider('Runabove', function () {
 
     /*==========  CONF  ==========*/
 
+    /**
+     * (Optional) Set the API base URL.
+     */
     this.setBaseUrl = function (url) {
         baseUrl = url;
     };
 
+    /**
+     * (Mandatory) Set the Application Key (AK).
+     */
     this.setAppKey = function (ak) {
         keys.ak = ak;
     };
 
+    /**
+     * (Mandatory) Set the Application Secret key (AS).
+     */
     this.setAppSecret = function (as) {
         keys.as = as;
     };
 
+    /**
+     * (Optional) Set the Consumer Key (CK).
+     * Useful when you've a token and then don't want to log the user.
+     */
     this.setConsumerKey = function (ck) {
         keys.ck = ck;
         localStorage.setItem('runabove-ck', ck);
     };
 
+    /**
+     * (Optional) Set the access rules.
+     * Restrict the requests access (default to "all access").
+     */
     this.setAccessRules = function (rules) {
         accessRules = rules;
     };
@@ -69,9 +86,13 @@ angular.module('ngRunabove').provider('Runabove', function () {
         // At init, get CK if present
         keys.ck = localStorage.getItem('runabove-ck');
 
-
-        /*==========  LOGIN  ==========*/
-
+        /**
+         * Log the user (request a new credential).
+         * It will redirect the user to the RunAbove API login page.
+         *
+         * @param  {string} urlToRedirect (Optional) When logged, redirect user to this URL.
+         * @return {promise}              Success/Error.
+         */
         function login (urlToRedirect) {
 
             // Delete old CK, if logged
@@ -88,7 +109,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
                 },
                 data    : {
                     accessRules : accessRules,
-                    redirection : urlToRedirect
+                    redirection : urlToRedirect || window.location.href
                 }
             }).then(function (data) {
 
@@ -106,12 +127,14 @@ angular.module('ngRunabove').provider('Runabove', function () {
             });
         }
 
-
-        /*==========  LOGOUT  ==========*/
-
+        /**
+         * Log out the user (expire current credential).
+         *
+         * @return {promise} Success/Error.
+         */
         function logout () {
 
-            // If we're not logged: exit
+            // If we're not logged: reject
             if (!isLogged()) {
                 return $q.reject({ data : { errorCode: 'NOT_CREDENTIAL', message: 'You\'re not logged.' } });
             }
@@ -141,17 +164,23 @@ angular.module('ngRunabove').provider('Runabove', function () {
             });
         }
 
-
-        /*==========  REQUEST  ==========*/
-
+        /**
+         * Perform a request to the RunAbove API.
+         *
+         * @param  {object} config  $http configuration object (see Angular docs).
+         * @return {promise}        Success/Error.
+         */
         function request (config) {
 
+            // Only requests with the "noAuthentication" flag can call the API without being logged
             if (!isLogged() && !config.noAuthentication) {
                 return $q.reject({ data : { errorCode: 'NOT_CREDENTIAL', message: 'You\'re not logged.' } });
             }
 
             return getApiTimeDiff().then(function (diff) {
 
+                // User can use an url like "/token/{tokenId}" with the corresponding parameters (here, "params.tokenId"),
+                // and it will be automatically replaced.
                 // Based on a great idea of @gierschv
                 if (config.params && ~config.url.indexOf('{')) {
                     angular.forEach(config.params, function (paramVal, paramKey) {
@@ -162,6 +191,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
                     });
                 }
 
+                // Get headers
                 config.headers = config.noAuthentication ? getHeaders() : getHeaders({
                     method : config.method,
                     url    : config.url,
@@ -169,10 +199,10 @@ angular.module('ngRunabove').provider('Runabove', function () {
                     diff   : diff
                 });
 
-
+                // Let's go!
                 return $http(config).then(function (data) {
 
-                    // Returns datas only
+                    // Return datas only
                     return data.data;
 
                 }, function (error) {
@@ -184,6 +214,12 @@ angular.module('ngRunabove').provider('Runabove', function () {
             });
         }
 
+        /**
+         * Get specific schema from API.
+         *
+         * @param  {string} schemaPath Path of the schema (like "/me.json").
+         * @return {promise}           Success/Error.
+         */
         function getSchema (schemaPath) {
             return $http({
                 method  : 'GET',
@@ -191,18 +227,28 @@ angular.module('ngRunabove').provider('Runabove', function () {
                 cache   : runaboveCache,
                 headers : getHeaders()
             }).then(function (data) {
+                // Return datas only
                 return data.data;
             }, function (error) {
                 return $q.reject(error);
             });
         }
 
+        /**
+         * Get all or a specific Models from API.
+         *
+         * @param  {string} schemaPath Path of the schema (like "/me.json").
+         * @param  {string} name       (Optional) Models name.
+         * @return {promise}           Success/Error.
+         */
         function getModels (schemaPath, name) {
             return getSchema(schemaPath).then(function (schema) {
+                // If no "name" param, return all models
                 if (!name) {
                     return schema.models;
                 }
-                return schema.models[name] ? schema.models[name] : $q.reject({ data : { errorCode: 'NOT_FOUND', message: 'Schema not found.' } });
+                // Return only the requested models (throw an error if not present)
+                return schema.models[name] ? schema.models[name] : $q.reject({ data : { errorCode: 'NOT_FOUND', message: 'Models not found.' } });
             }, function (error) {
                 return $q.reject(error);
             });
@@ -211,10 +257,20 @@ angular.module('ngRunabove').provider('Runabove', function () {
 
         /*==========  COMMON  ==========*/
 
+        /**
+         * User is logged ?
+         *
+         * @return {boolean} True/False.
+         */
         function isLogged () {
             return !!keys.ck;
         }
 
+        /**
+         * Get API time and calculate the difference with system clock.
+         *
+         * @return {promise} Success/Error.
+         */
         function getApiTimeDiff () {
             return $http({
                 method  : 'GET',
@@ -223,6 +279,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
                 headers : getHeaders()
             }).then(function (data) {
 
+                // Calculate the time lag between system clock and API time
                 return Math.floor(Date.now() / 1000) - data.data;
 
             }, function (error) {
@@ -230,12 +287,25 @@ angular.module('ngRunabove').provider('Runabove', function () {
             });
         }
 
+        /**
+         * Sign the request with SHA-1 encryption.
+         *
+         * @param  {object} opts Informations required for signature.
+         * @return {string}      Signed request.
+         */
         function signRequest (opts) {
             return '$1$' + SHA1([keys.as, keys.ck, opts.method, opts.url, opts.body, opts.diff].join('+'));
         }
 
+        /**
+         * Get request headers.
+         *
+         * @param  {object} opts (Optional) Informations about authentified request.
+         * @return {object}      The headers.
+         */
         function getHeaders (opts) {
             if (!opts) {
+                // No authentication
                 return {
                     'Content-Type' : 'application/json;charset=utf-8'
                 };
@@ -257,11 +327,9 @@ angular.module('ngRunabove').provider('Runabove', function () {
         }
 
         /**
-         *
          *  Secure Hash Algorithm (SHA1)
          *  http://www.webtoolkit.info/
-         *
-         **/
+         */
         /* jshint ignore:start */
         function SHA1 (msg) {
 
@@ -431,6 +499,8 @@ angular.module('ngRunabove').provider('Runabove', function () {
         }
         /* jshint ignore:end */
 
+
+        // External functions
         var fcts = {
             login     : login,
             logout    : logout,
@@ -439,6 +509,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
             getModels : getModels
         };
 
+        // Generate all REST requests
         angular.forEach(['get', 'put', 'post', 'delete', 'remove', 'del'], function (name) {
             fcts[name] = function (url, config) {
                 return request(angular.extend(config || {}, {
