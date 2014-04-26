@@ -3,7 +3,7 @@
  *
  * @author Jean-Philippe Blary (@blary_jp)
  * @url https://github.com/blaryjp/ng-runabove
- * @licence MIT
+ * @license MIT
  */
 
 var myApp = angular.module('myApp', [

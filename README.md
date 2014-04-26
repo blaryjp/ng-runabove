@@ -91,19 +91,13 @@ Runabove.login('http://www.example.com/home');
 ```
 Log the user (request a new credential).
 It will redirect the user to the RunAbove API login page.
-When logged, user will be redirect to the given URL (or current location if omitted).
+When logged, user will be redirected to the given URL (or current location if omitted).
 
 * **logout()**
 ```javascript
 Runabove.logout();
 ```
 Log out the user (expire current credential).
-
-* **isLogged()**
-```javascript
-Runabove.isLogged();
-```
-Return `true` if user is connected.
 
 * **get(url, [config])**
 * **post(url, [config])**
@@ -145,6 +139,11 @@ Runabove.getModels('/me', 'account.CountryEnum');
 ```
 Get all or a specific Models from API (here "/me", "account.CountryEnum"). If second param is omitted, it returns all the Models.
 
+* **isLogged()**
+```javascript
+Runabove.isLogged();
+```
+Return `true` if user is connected.
 
 
 
