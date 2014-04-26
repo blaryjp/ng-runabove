@@ -71,7 +71,64 @@ You can find more informations [here](https://api.ovh.com/g934.first_step_with_a
 Usage
 -----
 
-@todo
+* **login([urlToRedirect])**
+```javascript
+Runabove.login('http://www.example.com/home');
+```
+Log the user (request a new credential).
+It will redirect the user to the RunAbove API login page.
+When logged, user will be redirect to the given URL (or current location if omitted).
+
+* **logout()**
+```javascript
+Runabove.logout();
+```
+Log out the user (expire current credential).
+
+* **isLogged()**
+```javascript
+Runabove.isLogged();
+```
+Return `true` if user is connected.
+
+* **get(url, [config])**
+* **post(url, [config])**
+* **put(url, [config])**
+* **delete(url, [config])** (aliases: **del**, **remove**)
+```javascript
+Runabove.get('/me');
+Runabove.post('/storage', {
+    data : {
+        containerName   : 'toto',
+        containerRegion : 'BHS-1'
+    }
+});
+Runabove.put('/me', {
+    data : {
+        firstname : 'toto'
+    }
+});
+Runabove.delete('/ssh/{name}', {
+    params : {
+        name : 'mypublickey'    // 'name' will be automatically replaced in the url!
+    }
+});
+```
+
+
+* **getSchema(schemaPath)**
+```javascript
+Runabove.getSchema('/me');
+```
+Get specific schema from API (here "/me").
+
+* **getModels(schemaPath, [modelsName])**
+```javascript
+Runabove.getModels('/me', 'account.CountryEnum');
+```
+Get all or a specific Models from API (here "/me", "account.CountryEnum"). If second param is omitted, it returns all the Models.
+
+
 
 
 Examples
