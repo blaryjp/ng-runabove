@@ -98,8 +98,9 @@ angular.module('ngRunabove').provider('Runabove', function () {
                 // Redirect to Auth page
                 window.location = data.data.validationUrl;
 
+            }, function (error) {
+                return $q.reject(error);
             });
-
         }
 
 
@@ -109,7 +110,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
 
             // If we're not logged: exit
             if (!isLogged()) {
-                return $q.reject({ errorCode: 'NOT_CREDENTIAL', message: 'You\'re not logged.' });
+                return $q.reject({ data : { errorCode: 'NOT_CREDENTIAL', message: 'You\'re not logged.' } });
             }
 
             return getApiTimeDiff().then(function (diff) {
@@ -126,11 +127,14 @@ angular.module('ngRunabove').provider('Runabove', function () {
                     // Delete old CK
                     localStorage.removeItem('runabove-ck');
                     keys.ck = null;
-                }, function () {
+                }, function (error) {
                     // Delete old CK
                     localStorage.removeItem('runabove-ck');
                     keys.ck = null;
+                    return $q.reject(error);
                 });
+            }, function (error) {
+                return $q.reject(error);
             });
         }
 
@@ -140,7 +144,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
         function request (config) {
 
             if (!isLogged() && !config.noAuthentication) {
-                return $q.reject({ errorCode: 'NOT_CREDENTIAL', message: 'You\'re not logged.' });
+                return $q.reject({ data : { errorCode: 'NOT_CREDENTIAL', message: 'You\'re not logged.' } });
             }
 
             return getApiTimeDiff().then(function (diff) {
@@ -168,7 +172,12 @@ angular.module('ngRunabove').provider('Runabove', function () {
                     // Returns datas only
                     return data.data;
 
+                }, function (error) {
+                    return $q.reject(error);
                 });
+
+            }, function (error) {
+                return $q.reject(error);
             });
         }
 
@@ -180,6 +189,8 @@ angular.module('ngRunabove').provider('Runabove', function () {
                 headers : getHeaders()
             }).then(function (data) {
                 return data.data;
+            }, function (error) {
+                return $q.reject(error);
             });
         }
 
@@ -188,7 +199,9 @@ angular.module('ngRunabove').provider('Runabove', function () {
                 if (!name) {
                     return schema.models;
                 }
-                return schema.models[name] ? schema.models[name] : $q.reject({ errorCode: 'NOT_FOUND', message: 'Schema not found.' });
+                return schema.models[name] ? schema.models[name] : $q.reject({ data : { errorCode: 'NOT_FOUND', message: 'Schema not found.' } });
+            }, function (error) {
+                return $q.reject(error);
             });
         }
 
@@ -209,6 +222,8 @@ angular.module('ngRunabove').provider('Runabove', function () {
 
                 return Math.floor(Date.now() / 1000) - data.data;
 
+            }, function (error) {
+                return $q.reject(error);
             });
         }
 
