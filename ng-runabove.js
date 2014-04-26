@@ -72,7 +72,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
         function login (urlToRedirect) {
 
             // Delete old CK, if logged
-            if (keys.ck) {
+            if (isLogged()) {
                 localStorage.removeItem('runabove-ck');
                 keys.ck = null;
             }
@@ -108,7 +108,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
         function logout () {
 
             // If we're not logged: exit
-            if (!keys.ck) {
+            if (!isLogged()) {
                 return $q.reject({ errorCode: 'NOT_CREDENTIAL', message: 'You\'re not logged.' });
             }
 
@@ -139,7 +139,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
 
         function request (config) {
 
-            if (!keys.ck && !config.noAuthentication) {
+            if (!isLogged() && !config.noAuthentication) {
                 return $q.reject({ errorCode: 'NOT_CREDENTIAL', message: 'You\'re not logged.' });
             }
 
