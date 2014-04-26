@@ -79,7 +79,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
                 method  : 'POST',
                 url     : basePath + '/auth/credential',
                 headers : {
-                    'X-RA-Application' : keys.ak
+                    'X-Ra-Application' : keys.ak
                 },
                 data    : {
                     accessRules : accessRules,
@@ -225,10 +225,10 @@ angular.module('ngRunabove').provider('Runabove', function () {
                 var diff = (Math.floor(Date.now() / 1000) - opts.diff).toString();
                 return {
                     'Content-Type'     : 'application/json;charset=utf-8',
-                    'X-RA-Application' : keys.ak,
-                    'X-RA-Consumer'    : keys.ck,
-                    'X-RA-Timestamp'   : diff,
-                    'X-RA-Signature'   : signRequest({
+                    'X-Ra-Application' : keys.ak,
+                    'X-Ra-Consumer'    : keys.ck,
+                    'X-Ra-Timestamp'   : diff,
+                    'X-Ra-Signature'   : signRequest({
                         method : opts.method,
                         url    : opts.url,
                         body   : opts.body,
