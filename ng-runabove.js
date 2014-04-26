@@ -61,7 +61,10 @@ angular.module('ngRunabove').provider('Runabove', function () {
 
     /*==========  PROVIDER  ==========*/
 
-    this.$get = ['$http', '$q', function ($http, $q) {
+    this.$get = ['$http', '$q', '$cacheFactory', function ($http, $q, $cacheFactory) {
+
+        // Define default cache
+        var runaboveCache = $cacheFactory('RunaboveProvider');
 
         // At init, get CK if present
         keys.ck = localStorage.getItem('runabove-ck');
@@ -185,7 +188,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
             return $http({
                 method  : 'GET',
                 url     : baseUrl + schemaPath,
-                cache   : true,
+                cache   : runaboveCache,
                 headers : getHeaders()
             }).then(function (data) {
                 return data.data;
@@ -216,7 +219,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
             return $http({
                 method  : 'GET',
                 url     : baseUrl + '/time',
-                cache   : true,
+                cache   : runaboveCache,
                 headers : getHeaders()
             }).then(function (data) {
 
