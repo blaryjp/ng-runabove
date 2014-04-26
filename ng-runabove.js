@@ -77,7 +77,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
                 keys.ck = null;
             }
 
-            $http({
+            return $http({
                 method  : 'POST',
                 url     : baseUrl + '/auth/credential',
                 headers : {
@@ -144,8 +144,6 @@ angular.module('ngRunabove').provider('Runabove', function () {
             }
 
             return getApiTimeDiff().then(function (diff) {
-
-                config.url = baseUrl + config.url;
 
                 // Based on a great idea of @gierschv
                 if (config.params && ~config.url.indexOf('{')) {
@@ -427,7 +425,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
             fcts[name] = function (url, config) {
                 return request(angular.extend(config || {}, {
                     method : ((name === 'remove' || name === 'del') ? 'delete' : name).toUpperCase(),
-                    url    : url
+                    url    : baseUrl + url
                 }));
             };
         });
