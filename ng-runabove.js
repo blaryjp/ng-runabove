@@ -195,7 +195,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
                 config.headers = config.noAuthentication ? getHeaders() : getHeaders({
                     method : config.method,
                     url    : config.url,
-                    body   : config.body || '',
+                    body   : config.data ? angular.toJson(config.data) : '',
                     diff   : diff
                 });
 
