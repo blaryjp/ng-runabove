@@ -217,13 +217,13 @@ angular.module('ngRunabove').provider('Runabove', function () {
         /**
          * Get specific schema from API.
          *
-         * @param  {string} schemaPath Path of the schema (like "/me.json").
+         * @param  {string} schemaPath Path of the schema (like "/me").
          * @return {promise}           Success/Error.
          */
         function getSchema (schemaPath) {
             return $http({
                 method  : 'GET',
-                url     : baseUrl + schemaPath,
+                url     : baseUrl + schemaPath + '.json',
                 cache   : runaboveCache,
                 headers : getHeaders()
             }).then(function (data) {
