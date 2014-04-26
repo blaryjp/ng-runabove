@@ -93,6 +93,8 @@ Log the user (request a new credential).
 It will redirect the user to the RunAbove API login page.
 When logged, user will be redirected to the given URL (or current location if omitted).
 
+The token (the "Consumer Key" ("CK")) will be stored into the _localStorage_.
+
 * **logout()**
 ```javascript
 Runabove.logout();
