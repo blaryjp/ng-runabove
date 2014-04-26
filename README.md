@@ -71,6 +71,20 @@ You can find more informations [here](https://api.ovh.com/g934.first_step_with_a
 Usage
 -----
 
+All functions (except 'isLogged') returns a `promise` (with success and error). You can catch it like the angular way, e.g.:
+
+```javascript
+Runabove.get('/me').then(function (infos) {
+    // Success!
+    // The param contains all the datas.
+}, function (error) {
+    // Error!
+    // The param contains the traditional angular error.
+});
+```
+
+#### Functions
+
 * **login([urlToRedirect])**
 ```javascript
 Runabove.login('http://www.example.com/home');
@@ -99,13 +113,14 @@ Return `true` if user is connected.
 Runabove.get('/me');
 Runabove.post('/storage', {
     data : {
-        containerName   : 'toto',
+        containerName   : 'bigmama',
         containerRegion : 'BHS-1'
     }
 });
 Runabove.put('/me', {
     data : {
-        firstname : 'toto'
+        firstname : 'Bobobo-bo',
+        name      : 'Bo-bobo'
     }
 });
 Runabove.delete('/ssh/{name}', {
@@ -114,7 +129,9 @@ Runabove.delete('/ssh/{name}', {
     }
 });
 ```
+The param `config` is the same than Angular $http (see doc [here](https://docs.angularjs.org/api/ng/service/$http#usage)).
 
+Note that the `resolve` promise returns directly the datas.
 
 * **getSchema(schemaPath)**
 ```javascript
