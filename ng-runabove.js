@@ -11,9 +11,10 @@ angular.module('ngRunabove', []);
 angular.module('ngRunabove').provider('Runabove', function () {
     'use strict';
 
-    var basePath = 'https://manager.runabove.com/api/1.0';
+    var baseUrl = 'https://manager.runabove.com/api/1.0';
 
-    var accessRules = [{
+    var accessRules = [
+        {
             'method' : 'GET',
             'path'   : '/*'
         }, {
@@ -25,7 +26,8 @@ angular.module('ngRunabove').provider('Runabove', function () {
         }, {
             'method' : 'DELETE',
             'path'   : '/*'
-        }];
+        }
+    ];
 
     var keys = {
         ak: '',    // Application Key
@@ -35,8 +37,8 @@ angular.module('ngRunabove').provider('Runabove', function () {
 
     /*==========  CONF  ==========*/
 
-    this.setBasePath = function (url) {
-        basePath = url;
+    this.setBaseUrl = function (url) {
+        baseUrl = url;
     };
 
     this.setAppKey = function (ak) {
@@ -77,7 +79,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
 
             $http({
                 method  : 'POST',
-                url     : basePath + '/auth/credential',
+                url     : baseUrl + '/auth/credential',
                 headers : {
                     'X-Ra-Application' : keys.ak
                 },
@@ -113,10 +115,10 @@ angular.module('ngRunabove').provider('Runabove', function () {
             return getApiTimeDiff().then(function (diff) {
                 return $http({
                     method  : 'POST',
-                    url     : basePath + '/auth/logout',
+                    url     : baseUrl + '/auth/logout',
                     headers : getHeaders({
                         method : 'POST',
-                        url    : basePath + '/auth/logout',
+                        url    : baseUrl + '/auth/logout',
                         body   : '',
                         diff   : diff
                     })
@@ -143,7 +145,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
 
             return getApiTimeDiff().then(function (diff) {
 
-                config.url = basePath + config.url;
+                config.url = baseUrl + config.url;
 
                 // Based on a great idea of @gierschv
                 if (config.params && ~config.url.indexOf('{')) {
@@ -175,7 +177,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
         function getSchema (schemaPath) {
             return $http({
                 method  : 'GET',
-                url     : basePath + schemaPath,
+                url     : baseUrl + schemaPath,
                 cache   : true,
                 headers : getHeaders()
             }).then(function (data) {
@@ -202,7 +204,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
         function getApiTimeDiff () {
             return $http({
                 method  : 'GET',
-                url     : basePath + '/time',
+                url     : baseUrl + '/time',
                 cache   : true,
                 headers : getHeaders()
             }).then(function (data) {
