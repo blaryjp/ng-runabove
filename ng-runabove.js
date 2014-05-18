@@ -78,7 +78,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
 
     /*==========  PROVIDER  ==========*/
 
-    this.$get = ['$http', '$q', '$cacheFactory', function ($http, $q, $cacheFactory) {
+    this.$get = ['$http', '$q', '$cacheFactory', '$window', function ($http, $q, $cacheFactory, $window) {
 
         // Define default cache
         var runaboveCache = $cacheFactory('RunaboveProvider');
@@ -109,7 +109,7 @@ angular.module('ngRunabove').provider('Runabove', function () {
                 },
                 data    : {
                     accessRules : accessRules,
-                    redirection : urlToRedirect || window.location.href
+                    redirection : urlToRedirect || $window.location.href
                 }
             }).then(function (data) {
 
@@ -120,7 +120,10 @@ angular.module('ngRunabove').provider('Runabove', function () {
                 localStorage.setItem('runabove-ck', keys.ck);
 
                 // Redirect to Auth page
-                window.location = data.data.validationUrl;
+                $window.location = data.data.validationUrl;
+
+                // Return datas only
+                return data.data;
 
             }, function (error) {
                 return $q.reject(error);
@@ -179,17 +182,27 @@ angular.module('ngRunabove').provider('Runabove', function () {
 
             return getApiTimeDiff().then(function (diff) {
 
+                // Because we delete params from original object, save a local copy.
+                var params = config.params;
+
                 // User can use an url like "/token/{tokenId}" with the corresponding parameters (here, "params.tokenId"),
                 // and it will be automatically replaced.
                 // Based on a great idea of @gierschv
                 if (config.params && ~config.url.indexOf('{')) {
-                    angular.forEach(config.params, function (paramVal, paramKey) {
+                    // Because we delete params from original object, save a local copy.
+                    params = angular.copy(config.params);
+
+                    // Replace all URL params
+                    angular.forEach(params, function (paramVal, paramKey) {
                         if ((new RegExp('{' + paramKey + '}')).test(config.url)) {
-                            config.url = config.url.replace('{' + paramKey + '}', paramVal);
-                            delete config.params[paramKey];
+                            config.url = config.url.replace('{' + paramKey + '}', encodeURIComponent(paramVal));
+                            delete params[paramKey];
                         }
                     });
                 }
+
+                // Get cached params
+                config.params = params;
 
                 // Get headers
                 config.headers = config.noAuthentication ? getHeaders() : getHeaders({
